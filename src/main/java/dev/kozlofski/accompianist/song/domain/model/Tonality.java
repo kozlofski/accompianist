@@ -6,10 +6,10 @@ import lombok.Data;
 public class Tonality {
     private int key; // semitones from C, key is stored here
     private char keyName; // for displaying
-    private char Accidental; // B = bb, b = b, s = #, S = ##, X
+    private Accidental accidental; // B = bb, b = b, s = #, S = ##, X #fixme maybe change it to String like "flat", or enum
     private Scale scale;
 
-    public Tonality(char keyName, char accidental) {
+    public Tonality(char keyName, Accidental accidental) {
         this.key = (resolveKeyName(keyName) + resolveAccidental(accidental)) % 12; // #fixme unnecessary boxing?
 
     }
@@ -27,19 +27,23 @@ public class Tonality {
         };
     }
 
-    private int resolveAccidental(char accidental) {
+    protected int resolveAccidental(Accidental accidental) {
         return switch (accidental) {
-            case 'B' -> -2;
-            case 'b' -> -1;
-            case 's' -> 1;
-            case 'S' -> 2;
+            case DOUBLE_FLAT -> -2;
+            case FLAT -> -1;
+            case SHARP -> 1;
+            case DOUBLE_SHARP -> 2;
             default -> 0;
         };
     }
 
-    private enum Scale {
+    protected enum Scale {
         MAJOR, MINOR,
         IONIAN, DORIAN, PHRYGIAN, LYDIAN, MYXOLYDIAN, AEOLIAN, LOCRIAN,
         PENTATONIC, DODECAPHONIC
+    }
+
+    protected enum Accidental {
+        DOUBLE_FLAT, FLAT, SHARP, DOUBLE_SHARP
     }
 }
