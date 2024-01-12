@@ -17,10 +17,6 @@ public class SongService {
         return Arrays.asList(new Song("Name_1", 1), new Song("Name_2", 2));
     }
 
-//    public String test(float value) {
-//        return String.format("Hello %s %s", accompianistConfiguration.getName(), value+1.3);
-//    }
-
     public Song getSong(int id) {
         return new Song("Get song", id);
     }
