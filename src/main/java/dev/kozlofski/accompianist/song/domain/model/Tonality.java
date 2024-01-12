@@ -11,7 +11,6 @@ public class Tonality {
 
     public Tonality(char keyName, Accidental accidental) {
         this.key = (resolveKeyName(keyName) + resolveAccidental(accidental)) % 12; // #fixme unnecessary boxing?
-
     }
 
     private int resolveKeyName(char keyName) {

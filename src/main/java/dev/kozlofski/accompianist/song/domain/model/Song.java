@@ -25,5 +25,13 @@ public class Song {
         private final short unit;
     }
 
+    boolean sameTonality(Song song) {
+        return this.tonality.getKey() == song.tonality.getKey();
+    }
+
+    boolean sameTonality(Song song, boolean checkScale) {
+        return this.tonality.getKey() == song.tonality.getKey() &&
+                this.tonality.getScale() == song.tonality.getScale();
+    }
 
 }
