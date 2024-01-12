@@ -1,13 +1,28 @@
 package dev.kozlofski.accompianist.song.domain.model;
 
+import jakarta.annotation.Nullable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Entity
+@NoArgsConstructor
+@Table(name = "tonalities")
 public class Tonality {
+    @Id
+    private int id;
+
     private int key; // semitones from C, key is stored here
     private char keyName; // for displaying
     private Accidental accidental; // B = bb, b = b, s = #, S = ##, X #fixme maybe change it to String like "flat", or enum
     private Scale scale;
+
+    @OneToOne(mappedBy = "tonality")
+    private Song song;
 
     public Tonality(char keyName, Accidental accidental) {
         this.key = (resolveKeyName(keyName) + resolveAccidental(accidental)) % 12; // #fixme unnecessary boxing?
@@ -32,6 +47,7 @@ public class Tonality {
             case FLAT -> -1;
             case SHARP -> 1;
             case DOUBLE_SHARP -> 2;
+            case NATURAL -> 0;
             default -> 0;
         };
     }
@@ -43,6 +59,6 @@ public class Tonality {
     }
 
     protected enum Accidental {
-        DOUBLE_FLAT, FLAT, SHARP, DOUBLE_SHARP
+        DOUBLE_FLAT, FLAT, NATURAL, SHARP, DOUBLE_SHARP
     }
 }
