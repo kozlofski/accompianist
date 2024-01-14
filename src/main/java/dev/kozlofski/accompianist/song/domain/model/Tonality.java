@@ -1,64 +1,49 @@
 package dev.kozlofski.accompianist.song.domain.model;
 
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
+@Embeddable
 @NoArgsConstructor
-@Table(name = "tonalities")
 public class Tonality {
     @Id
     private int id;
 
-    private int key; // semitones from C, key is stored here
-    private char keyName; // for displaying
-    private Accidental accidental; // B = bb, b = b, s = #, S = ##, X #fixme maybe change it to String like "flat", or enum
+    private Key key;
     private Scale scale;
 
-    @OneToOne(mappedBy = "tonality")
-    private Song song;
-
-    public Tonality(char keyName, Accidental accidental) {
-        this.key = (resolveKeyName(keyName) + resolveAccidental(accidental)) % 12; // #fixme unnecessary boxing?
+    public Tonality(Key key) {
+        this.key = key;
     }
 
-    private int resolveKeyName(char keyName) {
-        return switch (keyName) {
-            case 'C' -> 0;
-            case 'D' -> 2;
-            case 'E' -> 4;
-            case 'F' -> 5;
-            case 'G' -> 7;
-            case 'A' -> 9;
-            case 'B' -> 11;
-            default -> 0;
-        };
+    public boolean enharmonicEquals() { //#fixme
+        return false;
     }
 
-    protected int resolveAccidental(Accidental accidental) {
-        return switch (accidental) {
-            case DOUBLE_FLAT -> -2;
-            case FLAT -> -1;
-            case SHARP -> 1;
-            case DOUBLE_SHARP -> 2;
-            case NATURAL -> 0;
-            default -> 0;
-        };
+    @Getter
+    enum Key {
+        C_DOUBLEFLAT(10), C_FLAT(11), C(0), C_SHARP(1), C_DOUBLESHARP(2),
+        D_DOUBLEFLAT(0), D_FLAT(1), D(2), D_SHARP(3),
+        E_FLAT(3), E(4), F(5), F_SHARP(6), G_FLAT(6),
+        G(7), G_SHARP(8), A_FLAT(8), A(9), A_SHARP(10),
+        B_FLAT(10), B(11),
+        KEYLESS(0); // #fixme add some exotic double sharp keys, or like e#
+
+        private final int value;
+
+        Key(int value) {
+            this.value = value;
+        }
     }
 
-    protected enum Scale {
+    enum Scale {
         MAJOR, MINOR,
         IONIAN, DORIAN, PHRYGIAN, LYDIAN, MYXOLYDIAN, AEOLIAN, LOCRIAN,
-        PENTATONIC, DODECAPHONIC
-    }
-
-    protected enum Accidental {
-        DOUBLE_FLAT, FLAT, NATURAL, SHARP, DOUBLE_SHARP
+        PENTATONIC,
+        DODECAPHONIC, ATONAL
     }
 }
