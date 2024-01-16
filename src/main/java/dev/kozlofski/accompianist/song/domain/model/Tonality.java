@@ -6,9 +6,9 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
-@Embeddable
-@NoArgsConstructor
 public class Tonality {
     @Id
     private int id;
@@ -16,9 +16,8 @@ public class Tonality {
     private Key key;
     private Scale scale;
 
-    public Tonality(Key key) {
-        this.key = key;
-    }
+//    @OneToMany
+//    private Set<Song> songs;
 
     public boolean enharmonicEquals() { //#fixme
         return false;
@@ -31,7 +30,7 @@ public class Tonality {
         E_FLAT(3), E(4), F(5), F_SHARP(6), G_FLAT(6),
         G(7), G_SHARP(8), A_FLAT(8), A(9), A_SHARP(10),
         B_FLAT(10), B(11),
-        KEYLESS(0); // #fixme add some exotic double sharp keys, or like e#
+        KEYLESS(0); // #fixme add all possible keys
 
         private final int value;
 
