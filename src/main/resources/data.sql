@@ -1,7 +1,7 @@
 insert into songs (id, name, composer, "meterbeats", "meterunits") values
-        (1, 'Prelude', null, null, null),
-        (2 ,'Nocturne', null, null, null),
-        (3, 'Romance', null, null, null);
+        (0, 'Prelude', null, 4, 4),
+        (1, 'Nocturne', null, 3, 4),
+        (2, 'Romance', null, 6, 8);
 
 -- insert into tonalities (key, accidental) values
 --         (C, SHARP);
